@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from mysql.connector import IntegrityError
 
 from database import criar_conexao
-from schemas import AlunoCreate, AlunoResponse, ProfessorResponse, ProfessorCreate
+from schemas import AlunoCreate, AlunoResponse, ProfessorResponse, ProfessorCreate, FuncionarioResponse, FuncionarioCreate
 
 
 app = FastAPI()
@@ -181,4 +181,76 @@ def cadastrar_professor(professor: ProfessorCreate):
 
 @app.get("/funcionarios", response_model=list[FuncionarioResponse])
 def listar_funcionarios():
-    
+    conexao = criar_conexao()
+    cursor = conexao.cursor()
+
+    cursor.execute("SELECT * FROM funcionario")
+    registros = cursor.fetchall()
+
+    cursor.close()
+    conexao.close()
+
+    funcionario = []
+
+    for registro in registros:
+        funcionario.append({
+            "id": registro[0],
+            "nome": registro[1],
+            "cpf": registro[2],
+            "email": registro[3],
+            "cargo": registro[4],
+            "setor": registro[5]
+        })
+
+    return funcionario
+
+@app.post("/funcionarios", response_model=FuncionarioResponse)
+def cadastrar_funcionario(funcionario: FuncionarioCreate):
+
+    conexao = criar_conexao()
+    cursor = conexao.cursor()
+
+    sql = '''
+        INSERT INTO funcionario
+        (nome, cpf, email, cargo, setor)
+        VALUES (%s, %s, %s, %s, %s)
+    '''
+
+    valores = (
+        funcionario.nome,
+        funcionario.cpf,
+        funcionario.email,
+        funcionario.cargo,
+        funcionario.setor
+    )
+
+    try:
+        cursor.execute(sql, valores)
+        conexao.commit()
+
+        return {
+            "id": cursor.lastrowid,
+            "nome": funcionario.nome,
+            "cpf": funcionario.cpf,
+            "email": funcionario.email,
+            "data_nascimento": funcionario.data_nascimento,
+            "curso": funcionario.curso
+        }
+
+    except IntegrityError as erro:
+        conexao.rollback()
+
+        if erro.errno == 1062:
+            raise HTTPException(
+                status_code=409,
+                detail="CPF já cadastrado."
+            )
+
+        raise HTTPException(
+            status_code=500,
+            detail="Erro de integridade no banco de dados."
+        )
+
+    finally:
+        cursor.close()
+        conexao.close()
