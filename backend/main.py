@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from mysql.connector import IntegrityError
 
 from database import criar_conexao
-from schemas import AlunoCreate, AlunoResponse
+from schemas import AlunoCreate, AlunoResponse, ProfessorResponse, ProfessorCreate
 
 
 app = FastAPI()
@@ -57,6 +57,29 @@ def listar_alunos():
 
     return alunos
 
+@app.get("/professores", response_model=list[ProfessorResponse])
+def listar_professores():
+    conexao = criar_conexao()
+    cursor = conexao.cursor()
+
+    cursor.execute("SELECT * FROM professor")
+    registros = cursor.fetchall()
+
+    cursor.close()
+    conexao.close()
+
+    professor = []
+
+    for registro in registros:
+        professor.append({
+            "id": registro[0],
+            "nome": registro[1],
+            "cpf": registro[2],
+            "email": registro[3],
+            "especialidade": registro[4]
+        })
+
+    return professor    
 
 @app.post("/alunos", response_model=AlunoResponse)
 def cadastrar_aluno(aluno: AlunoCreate):
@@ -107,3 +130,55 @@ def cadastrar_aluno(aluno: AlunoCreate):
     finally:
         cursor.close()
         conexao.close()
+
+@app.post("/professores", response_model=ProfessorResponse)
+def cadastrar_professor(professor: ProfessorCreate):
+    conexao = criar_conexao()
+    cursor = conexao.cursor()
+    
+    sql = '''
+            INSERT INTO professor
+            (nome, cpf, email, especialidade)
+            VALUES (%s, %s, %s, %s, %s)
+        '''
+    
+    valores = (
+            professor.nome,
+            professor.cpf,
+            professor.email,
+            professor.especialidade
+        )
+    
+    try:
+            cursor.execute(sql, valores)
+            conexao.commit()
+    
+            return {
+                "id": cursor.lastrowid,
+                "nome": professor.nome,
+                "cpf": professor.cpf,
+                "email": professor.email,
+                "especialidade": professor.especialidade
+            }
+    
+    except IntegrityError as erro:
+            conexao.rollback()
+    
+            if erro.errno == 1062:
+                raise HTTPException(
+                    status_code=409,
+                    detail="CPF já cadastrado."
+                )
+    
+            raise HTTPException(
+                status_code=500,
+                detail="Erro de integridade no banco de dados."
+            )
+    
+    finally:
+            cursor.close()
+            conexao.close()
+
+@app.get("/funcionarios", response_model=list[FuncionarioResponse])
+def listar_funcionarios():
+    
