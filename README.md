@@ -37,10 +37,10 @@ fastapi dev backend/main.py
 ## 6. Criar .env
 Clone o .env.example para configurações do Banco De Dados:
 ```bash
-cp .env .env.example
+cp .env.example .env
 ```
 
-## 6. Configurar .env
+## 7. Configurar .env
 Com o .env criado edite o "DB_PASSWORD=" com as senha do seu banco
 ```bash
 DB_PASSWORD=suasenha
