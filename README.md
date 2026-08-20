@@ -1,97 +1,35 @@
-```markdown
-# 🚀 Guia de Instalação e Execução do Projeto (FastAPI)
+# Configuração do Ambiente FastAPI
 
-Este guia contém o passo a passo para clonar, configurar o ambiente virtual, instalar as dependências e rodar a aplicação localmente.
+Siga o passo a passo abaixo para configurar e executar o ambiente de desenvolvimento FastAPI.
 
----
-
-## 📋 Pré-requisitos
-
-- **Git** instalado na sua máquina
-- **Python 3.10+** instalado
-
----
-
-## 🛠️ Passo a Passo
-
-### 1. Clonar o repositório
-Substitua a URL abaixo pela URL do repositório do seu projeto:
-
-```bash
-git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
-cd seu-repositorio
-
-```
-
----
-
-### 2. Criar o ambiente virtual
-
+## 1. Criar o Ambiente Virtual
+Crie um ambiente virtual (`venv`) para isolar as dependências do projeto:
 ```bash
 python -m venv venv
-
 ```
 
----
-
-### 3. Ativar o ambiente virtual
-
-* **Windows (PowerShell / Prompt de Comando):**
+## 2. Ativar o Ambiente Virtual
+Ative o ambiente virtual criado (comando para Windows):
 ```bash
 venv\Scripts\activate
-
 ```
+*(Se estiver usando Linux/macOS, utilize: `source venv/bin/activate`)*
 
-
-* **Linux / macOS (caso necessário):**
+## 3. Instalar as Dependências
+Instale os pacotes necessários para rodar a aplicação:
 ```bash
-source venv/bin/activate
-
+pip install fastapi uvicorn mysql-connector-python python-dotenv email-validator
 ```
+*(Nota: O pacote `email-validato` foi corrigido para o nome correto `email-validator`)*
 
-
-
----
-
-### 4. Atualizar o `pip` (Opcional, mas recomendado)
-
+## 4. Atualizar o Pip
+Caso seja necessário, atualize o gerenciador de pacotes `pip` para a versão mais recente:
 ```bash
-python -m pip install --upgrade pip
-
+python.exe -m pip install --upgrade pip
 ```
 
----
-
-### 5. Instalar as dependências
-
-Instale o FastAPI com a CLI padrão (`fastapi[standard]`) e os demais pacotes necessários:
-
-```bash
-pip install "fastapi[standard]" uvicorn mysql-connector-python python-dotenv email-validator
-
-```
-
----
-
-### 6. Executar o servidor de desenvolvimento
-
-Inicie o servidor utilizando o comando de desenvolvimento do FastAPI:
-
+## 5. Rodar a Aplicação
+Inicie o servidor de desenvolvimento do FastAPI:
 ```bash
 fastapi dev backend/main.py
-
-```
-
----
-
-## 🌐 Acesso à API e Documentação
-
-Após iniciar o servidor, abra o navegador nos seguintes endereços:
-
-* **Aplicação:** [http://127.0.0.1:8000](https://www.google.com/search?q=http://127.0.0.1:8000)
-* **Documentação Swagger (Swagger UI):** [http://127.0.0.1:8000/docs](https://www.google.com/search?q=http://127.0.0.1:8000/docs)
-* **Documentação Redoc:** [http://127.0.0.1:8000/redoc](https://www.google.com/search?q=http://127.0.0.1:8000/redoc)
-
-```
-
 ```
