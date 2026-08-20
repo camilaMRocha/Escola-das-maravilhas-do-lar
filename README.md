@@ -33,3 +33,15 @@ Inicie o servidor de desenvolvimento do FastAPI:
 ```bash
 fastapi dev backend/main.py
 ```
+
+## 6. Criar .env
+Clone o .env.example para configurações do Banco De Dados:
+```bash
+cp .env .env.example
+```
+
+## 6. Configurar .env
+Com o .env criado edite o "DB_PASSWORD=" com as senha do seu banco
+```bash
+DB_PASSWORD=suasenha
+```
