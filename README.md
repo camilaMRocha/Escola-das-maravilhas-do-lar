@@ -18,7 +18,7 @@ venv\Scripts\activate
 ## 3. Instalar as Dependências
 Instale os pacotes necessários para rodar a aplicação:
 ```bash
-pip install fastapi uvicorn mysql-connector-python python-dotenv email-validator
+pip install fastapi uvicorn mysql-connector-python python-dotenv email-validator "fastapi[standard]"
 ```
 *(Nota: O pacote `email-validato` foi corrigido para o nome correto `email-validator`)*
 
