@@ -1,4 +1,4 @@
-const formulario = document.getElementById("form-aluno");
+const formulario = document.getElementById("form-funcionario");
 const mensagem = document.getElementById("mensagem");
 
 formulario.addEventListener("submit", async function(evento) {
@@ -6,32 +6,34 @@ formulario.addEventListener("submit", async function(evento) {
 
     mensagem.textContent = "";
 
-    const aluno = {
+    const funcionario = {
         nome: document.getElementById("nome").value,
         cpf: document.getElementById("cpf").value,
         email: document.getElementById("email").value,
-        data_nascimento: document.getElementById("data_nascimento").value,
-        curso: document.getElementById("curso").value
+        cargo: document.getElementById("cargo").value,
+        setor: document.getElementById("setor").value
     };
 
+    console.log(funcionario)
+
     try {
-        const resposta = await fetch("/alunos", {
+        const resposta = await fetch("/funcionario", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(aluno)
+            body: JSON.stringify(funcionario)
         });
 
         const resultado = await resposta.json();
 
         if (resposta.ok) {
-            mensagem.textContent = "Aluno cadastrado com sucesso!";
+            mensagem.textContent = "Funcionario cadastrado com sucesso!";
             formulario.reset();
-            console.log("Aluno cadastrado:", resultado);
+            console.log("Funcionario cadastrado:", resultado);
         } else {
             mensagem.textContent =
-                "Erro ao cadastrar aluno: " + obterMensagemErro(resultado);
+                "Erro ao cadastrar funcionario: " + obterMensagemErro(resultado);
 
             console.error("Erro da API:", resultado);
         }
@@ -58,8 +60,8 @@ function obterMensagemErro(resultado) {
                 if (campo === "email") return "E-mail inválido.";
                 if (campo === "nome") return "Nome inválido.";
                 if (campo === "cpf") return "CPF inválido.";
-                if (campo === "data_nascimento") return "Data de nascimento inválida.";
-                if (campo === "curso") return "Curso inválido.";
+                if (campo === "cargo") return "Cargo inválida.";
+                if (campo === "setor") return "Setor inválido.";
 
                 return erro.msg;
             })

@@ -1,6 +1,6 @@
-<h1>Cadastro de Professor</h1>
+<h1>Cadastro de Alunos</h1>
 
-<form id="form-professor">
+<form id="form-aluno">
     <div>
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" required>
@@ -17,8 +17,13 @@
     </div>
 
     <div>
-        <label for="especialidade">Especialidade:</label>
-        <input type="text" id="especialidade" name="especialidade" required>
+        <label for="data_nascimento">Data de nascimento:</label>
+        <input type="date" id="data_nascimento" name="data_nascimento" required>
+    </div>
+
+    <div>
+        <label for="curso">Curso:</label>
+        <input type="text" id="curso" name="curso" required>
     </div>
 
     <button type="submit">Cadastrar</button>
@@ -28,4 +33,4 @@
 
 <a href="/">Voltar para o início</a>
 
-<script src="/frontend/js/professor.js"></script>
+<script src="/frontend/js/create/aluno.js"></script>

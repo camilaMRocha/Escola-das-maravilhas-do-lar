@@ -31,6 +31,13 @@ def pagina_inicial():
 def pagina_cadastro_aluno():
     return FileResponse(FRONTEND_DIR / "cadastrodealuno.html")
 
+@app.get("/cadastro-de-aluno", include_in_schema=False)
+def pagina_cadastro_aluno():
+    return FileResponse(FRONTEND_DIR / "cadastrodeprofessor.html")
+
+@app.get("/cadastro-de-aluno", include_in_schema=False)
+def pagina_cadastro_aluno():
+    return FileResponse(FRONTEND_DIR / "cadastrodefuncionario.html")
 
 @app.get("/alunos", response_model=list[AlunoResponse])
 def listar_alunos():
@@ -57,12 +64,12 @@ def listar_alunos():
 
     return alunos
 
-@app.get("/professores", response_model=list[ProfessorResponse])
+@app.get("/professor", response_model=list[ProfessorResponse])
 def listar_professores():
     conexao = criar_conexao()
     cursor = conexao.cursor()
 
-    cursor.execute("SELECT * FROM professor")
+    cursor.execute("SELECT * FROM professores")
     registros = cursor.fetchall()
 
     cursor.close()
@@ -131,15 +138,15 @@ def cadastrar_aluno(aluno: AlunoCreate):
         cursor.close()
         conexao.close()
 
-@app.post("/professores", response_model=ProfessorResponse)
+@app.post("/professor", response_model=ProfessorResponse)
 def cadastrar_professor(professor: ProfessorCreate):
     conexao = criar_conexao()
     cursor = conexao.cursor()
     
     sql = '''
-            INSERT INTO professor
+            INSERT INTO professores
             (nome, cpf, email, especialidade)
-            VALUES (%s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s)
         '''
     
     valores = (
@@ -179,12 +186,12 @@ def cadastrar_professor(professor: ProfessorCreate):
             cursor.close()
             conexao.close()
 
-@app.get("/funcionarios", response_model=list[FuncionarioResponse])
+@app.get("/funcionario", response_model=list[FuncionarioResponse])
 def listar_funcionarios():
     conexao = criar_conexao()
     cursor = conexao.cursor()
 
-    cursor.execute("SELECT * FROM funcionario")
+    cursor.execute("SELECT * FROM funcionarios")
     registros = cursor.fetchall()
 
     cursor.close()
@@ -204,14 +211,14 @@ def listar_funcionarios():
 
     return funcionario
 
-@app.post("/funcionarios", response_model=FuncionarioResponse)
+@app.post("/funcionario", response_model=FuncionarioResponse)
 def cadastrar_funcionario(funcionario: FuncionarioCreate):
 
     conexao = criar_conexao()
     cursor = conexao.cursor()
 
     sql = '''
-        INSERT INTO funcionario
+        INSERT INTO funcionarios
         (nome, cpf, email, cargo, setor)
         VALUES (%s, %s, %s, %s, %s)
     '''
@@ -233,8 +240,8 @@ def cadastrar_funcionario(funcionario: FuncionarioCreate):
             "nome": funcionario.nome,
             "cpf": funcionario.cpf,
             "email": funcionario.email,
-            "data_nascimento": funcionario.data_nascimento,
-            "curso": funcionario.curso
+            "cargo": funcionario.cargo,
+            "setor": funcionario.setor
         }
 
     except IntegrityError as erro:
